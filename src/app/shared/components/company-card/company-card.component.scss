@@ -1,0 +1,29 @@
+.brand-logo{
+    width: 36px;
+    height: 36px;
+
+    img{
+        width: 100%;
+    }
+}
+
+mat-card-title{
+    display: grid;
+    grid-template-columns: 36px 1fr;
+
+    .title {
+        display: flex;
+        justify-content: center;
+        margin-right: 36px;
+    }
+}
+
+mat-card-content{
+    display: flex;
+    justify-content: center;
+    margin-bottom: 1rem;
+}
+
+app-star-rating{
+    width: 100%;
+}
