@@ -13,6 +13,15 @@
         color:rgb(231, 225, 225);
         align-items: center;
         
+        .brand{
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: 3px;
+            word-spacing: 6px;
+            color: #ffffff;
+            margin-right: 1rem;
+            cursor: pointer;
+        }
         .menu{
             margin-left:auto;
             ul{
