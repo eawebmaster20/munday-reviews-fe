@@ -1,12 +1,33 @@
 import { Routes } from '@angular/router';
 import { AuthComponent } from './features/auth/auth.component';
+import { DashboardComponent } from './features/dashboard/dashboard.component';
 
 export const routes: Routes = [
-  { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+  { path: '', redirectTo: 'dashboard/home', pathMatch: 'full' },
   {
     path: 'dashboard',
-    loadComponent: () =>
-      import('./features/dashboard/dashboard.component').then((m) => m.DashboardComponent),
+    component: DashboardComponent,
+    children: [
+      {
+        path: 'home',
+        loadComponent: () =>
+          import('./features/dashboard/home/home.component').then((m) => m.HomeComponent),
+      },
+      // {
+      //   path: 'review/:id',
+      //   loadComponent: () =>
+      //     import('./features/dashboard/review/review-detail/review-detail.component').then(
+      //       (m) => m.ReviewDetailComponent
+      //     ),
+      // },
+      // {
+      //   path: 'review/edit/:id',
+      //   loadComponent: () =>
+      //     import('./features/dashboard/review/review-edit/review-edit.component').then(
+      //       (m) => m.ReviewEditComponent
+      //     ),
+      // },
+    ],
   },
   {
     path: 'auth',
