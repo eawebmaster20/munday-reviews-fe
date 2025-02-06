@@ -1,0 +1,45 @@
+.container{
+    display: flex;
+    width: 100%;
+    justify-content:center;
+    background-color: #2b5886;
+
+    .content{
+        display:flex;
+        width: 100%;
+        min-width: 768px;
+        max-width: 1360px;
+        padding: 20px;
+        color:rgb(231, 225, 225);
+        align-items: center;
+        
+        .menu{
+            margin-left:auto;
+            ul{
+                list-style: none;
+                display: flex;
+                gap:1rem;
+                cursor: pointer;
+
+                li:hover{
+                    text-decoration: underline;
+                    color: #ffffff;
+                }
+                
+                span{
+                    padding:0.8rem;
+                    background-color: rgb(223, 223, 223);
+                    border-radius: 24px;
+                    color: #2b5886;
+                    transition: background-color ease-in-out;
+                    
+                    &:hover{
+                        background-color: rgb(204, 217, 240);
+                        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+                        text-decoration: none;
+                    }
+                }
+            }
+        }
+    }
+}

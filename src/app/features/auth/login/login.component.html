@@ -1,1 +1,36 @@
-<p>login works!</p>
+<mat-card [formGroup]="loginForm">
+  <p>
+    <span><h2>Login</h2></span>
+  </p>
+  <p>
+    <mat-form-field appearance="outline">
+      <mat-label>Email</mat-label>
+      <input formControlName="email" matInput placeholder="example@test.com" />
+      @if (loginForm.get('email')?.hasError('required')) {
+        <mat-error> Email is required. </mat-error>
+      }
+      @if (loginForm.get('email')?.hasError('email')) {
+        <mat-error> Must be a valid email address. </mat-error>
+      }
+    </mat-form-field>
+  </p>
+  <p>
+    <mat-form-field appearance="outline">
+      <mat-label>Password</mat-label>
+      <input type="password" formControlName="password" matInput placeholder="Placeholder" />
+      <mat-icon matSuffix>lock</mat-icon>
+      @if (loginForm.get('password')?.hasError('required')) {
+        <mat-error> Password is required. </mat-error>
+      }
+      @if (loginForm.get('password')?.hasError('minlength')) {
+        <mat-error> Password must be at least 5 characters long. </mat-error>
+      }
+    </mat-form-field>
+  </p>
+  <p class="d-flex">
+    <button mat-flat-button color="primary" (click)="authenticate()" [disabled]="loginForm.valid">
+      Login
+    </button>
+    <span class="link" routerLink="/auth/register">SignUp instead</span>
+  </p>
+</mat-card>
