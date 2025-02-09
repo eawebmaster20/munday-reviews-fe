@@ -1,0 +1,39 @@
+.auth-container{
+    width: 100%;
+    display:flex;
+    justify-content: center;
+    margin-top: 8rem;
+    background: transparent;
+
+    .auth-form{
+        background-color: #e8e8e8;
+        width: 300px;
+        padding: 1rem;
+        border-radius: 8px;
+    }
+    ::ng-deep mat-card{
+        background-color: transparent;
+        display:flex;
+        width: 100%;
+        box-shadow: none;
+    
+        mat-form-field{
+            width: 100%;
+        }
+
+        p{
+            margin: 0;
+        }
+
+        .d-flex{
+            display: flex;
+        }
+        .link{
+            text-decoration: underline;
+            color: #3f51b5;
+            margin-left: auto;
+            margin-top: auto;
+            cursor: pointer;
+        }
+    }
+}

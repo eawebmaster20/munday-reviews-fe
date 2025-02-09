@@ -1,1 +1,17 @@
-<p>main-toolbar works!</p>
+<div class="container">
+  <div class="content">
+    <div class="brand">Munday Reviews</div>
+    <div class="menu">
+      <ul>
+        <li class="menu-item">Write a review</li>
+        <li class="menu-item">Categories</li>
+        @if (authService.isAuthenticated$ | async) {
+          <li class="menu-item" (click)="authService.logout()">logout</li>
+        } @else {
+          <li class="menu-item" [routerLink]="'auth/login'">Login</li>
+        }
+        <li><span>For business</span></li>
+      </ul>
+    </div>
+  </div>
+</div>

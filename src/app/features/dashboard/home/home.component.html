@@ -1,0 +1,13 @@
+<div class="container">
+  <p class="search-bar">
+    <mat-form-field>
+      <mat-label>Filter</mat-label>
+      <input matInput (keyup)="applyFilter($event)" placeholder="Ex. ium" #input />
+    </mat-form-field>
+  </p>
+  <div class="listing">
+    @for (company of companies; track $index) {
+      <app-company-card (clickEvent)="viewCompany($event)" [data]="company" />
+    }
+  </div>
+</div>

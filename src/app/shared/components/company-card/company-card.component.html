@@ -1,0 +1,17 @@
+<mat-card>
+  <mat-card-title>
+    <div mat-card-avatar class="brand-logo"><img [src]="data.logoUrl" alt="" srcset="" /></div>
+    <div class="title">{{ data.name }}</div>
+  </mat-card-title>
+
+  <mat-card-content>
+    {{ data.info }}
+    <div class="view">
+      <button mat-flat-button (click)="handleClick()">view company</button>
+    </div>
+  </mat-card-content>
+
+  <mat-card-actions>
+    <app-star-rating [rating]="data.averageRating" [readOnly]="data.readonly"></app-star-rating>
+  </mat-card-actions>
+</mat-card>

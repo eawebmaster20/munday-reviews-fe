@@ -1,0 +1,55 @@
+<mat-card [formGroup]="signupForm">
+  <p>
+    <span><h2>SignUp</h2></span>
+  </p>
+  <p>
+    <mat-form-field appearance="outline">
+      <mat-label>Username</mat-label>
+      <input formControlName="username" matInput placeholder="test20" />
+      @if (signupForm.get('username')?.hasError('required')) {
+        <mat-error> username is required. </mat-error>
+      }
+      @if (signupForm.get('username')?.hasError('noSpace')) {
+        <mat-error> Username must not have spaces. </mat-error>
+      }
+    </mat-form-field>
+  </p>
+  <p>
+    <mat-form-field appearance="outline">
+      <mat-label>Email</mat-label>
+      <input formControlName="email" matInput placeholder="example@test.com" />
+      @if (signupForm.get('email')?.hasError('required')) {
+        <mat-error> Email is required. </mat-error>
+      }
+      @if (signupForm.get('email')?.hasError('email')) {
+        <mat-error> Must be a valid email address. </mat-error>
+      }
+    </mat-form-field>
+  </p>
+  <p>
+    <mat-form-field appearance="outline">
+      <mat-label>Password</mat-label>
+      <input [type]="inputType" formControlName="password" matInput placeholder="Password*" />
+      <mat-icon class="cursor-pointer" (click)="toggleType()" matSuffix>{{
+        inputType === 'password' ? 'lock' : 'lock_open'
+      }}</mat-icon>
+      @if (signupForm.get('password')?.hasError('required')) {
+        <mat-error> Password is required. </mat-error>
+      }
+      @if (signupForm.get('password')?.hasError('minlength')) {
+        <mat-error> Password must be at least 5 characters long. </mat-error>
+      }
+    </mat-form-field>
+  </p>
+  <p class="d-flex">
+    <button
+      mat-flat-button
+      color="primary"
+      (click)="register()"
+      [disabled]="!signupForm.valid || formSubmitted"
+    >
+      Signup
+    </button>
+    <span class="link" routerLink="/auth/login">Login instead</span>
+  </p>
+</mat-card>

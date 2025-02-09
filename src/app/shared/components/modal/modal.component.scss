@@ -1,0 +1,35 @@
+.company-average-rating{
+    display: flex;
+    justify-content: space-between;
+    font-size: 28px;
+    font-weight: 700;
+    // height: 50px;
+
+    app-star-rating{
+        width: 100%;
+    }
+}
+
+::ng-deep {
+    .container__items{
+        label{
+            width: 10% !important;
+        }
+    }
+}
+
+.add-review-actions{
+    .active-btn{
+        display: flex;
+        width: max-content;
+        background-color: #346ab7;
+        color: white !important;
+    }
+
+    .disabled-btn{
+        display: flex;
+        width: max-content;
+        background-color: #c4c4c4;
+        color: #5f5e5e !important;
+    }
+}
