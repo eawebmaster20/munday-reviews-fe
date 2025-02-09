@@ -1,8 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CompanyCardComponent } from '../../../shared/components/company-card/company-card.component';
 import { ICompanyCardData } from '../../../core/models/companycard.interface';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { ModalComponent } from '../../../shared/components/modal/modal.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-home',
@@ -77,9 +79,19 @@ export class HomeComponent {
       readonly: false,
     },
   ];
+  dialog = inject(MatDialog);
 
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     console.log(filterValue);
+  }
+
+  viewCompany(company: ICompanyCardData) {
+    const dialogRef = this.dialog.open(ModalComponent, {
+      data: company,
+    });
+    dialogRef.afterClosed().subscribe((result) => {
+      console.log(`Dialog result: ${result}`);
+    });
   }
 }
