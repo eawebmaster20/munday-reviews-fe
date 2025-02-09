@@ -1,9 +1,11 @@
-name: Angular CI with Docker
+name: CI/CD
 
 on:
   push:
     branches:
       - main
+      - dev
+      - feat/setup
 
 jobs:
   build:
@@ -12,11 +14,9 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
+        with:
+          node-version: '20.18.0'
 
-      - name: Build and Test Angular in Docker
-        run: |
-          docker run --rm \
-            -v ${{ github.workspace }}:/app \
-            -w /app \
-            node:18-bullseye \
-            /bin/bash -c "npm ci && npm run build -- --configuration=production && npm test -- --watch=false"
+      - run: npm install
+      - run: npm run build
+      - run: npm test
