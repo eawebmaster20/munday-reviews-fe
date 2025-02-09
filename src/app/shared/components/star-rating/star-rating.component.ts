@@ -19,9 +19,13 @@ export class StarRatingComponent {
   @Input() readOnly: boolean = false;
   @Input() showHalfStars: boolean = false;
 
-  log(data: number) {
-    if (!this.readOnly) {
-      this.rating = data;
+  log(data: number, event: Event) {
+    event.stopPropagation();
+    if (this.readOnly) {
+      console.log('READ ONLY');
+      return;
     }
+    console.log('not READ ONLY', data, this.readOnly);
+    this.rating = data;
   }
 }
