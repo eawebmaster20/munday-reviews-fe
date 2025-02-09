@@ -6,7 +6,8 @@
     "start": "ng serve",
     "build:prod": "ng build",
     "watch": "ng build --watch --configuration development",
-    "lint": "ng lint"
+    "lint": "ng lint",
+    "test": "ng test"
   },
   "lint-staged": {
     "*.md": "prettier --write",
