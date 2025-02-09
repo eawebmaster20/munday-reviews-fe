@@ -4,6 +4,7 @@ import { IAuthReqPayload } from '../../core/models/authReq.interface';
 import { jwtDecode } from 'jwt-decode';
 import { Router } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
+import { StateService } from '../../core/services/state/state.service';
 
 @Injectable({
   providedIn: 'root',
@@ -14,6 +15,7 @@ export class AuthService {
   constructor(
     private api: ApiService,
     private router: Router,
+    private stateService: StateService,
   ) {}
   login(payload: IAuthReqPayload) {
     return this.api.post('auth/login', payload);
@@ -34,8 +36,10 @@ export class AuthService {
       if (decodedToken.exp) {
         return decodedToken.exp * 1000 > Date.now();
       }
+      this.setUserAuthenticated(false);
       return false;
     }
+    this.setUserAuthenticated(false);
     return false;
   }
 
@@ -46,6 +50,7 @@ export class AuthService {
   logout() {
     localStorage.removeItem('token');
     this.isUserAuthenticated.next(false);
+    this.stateService.setStateItem({ showSidenav: false });
     this.router.navigate(['/auth/login']);
   }
 }

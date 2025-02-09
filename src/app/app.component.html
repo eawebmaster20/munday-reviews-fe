@@ -1,6 +1,20 @@
 <app-main-toolbar />
 <div class="app-body">
-  <div class="route-container">
+  <mat-drawer-container class="route-container" autosize>
+    <mat-drawer
+      class="drawer-container"
+      #drawer
+      [opened]="state.getStateItem('showSidenav') && authService.isAuthenticated$ | async"
+      mode="side"
+    >
+      <mat-nav-list>
+        @for (item of menuItems; track $index) {
+          <a mat-list-item [routerLink]="item.link" class="menu-item">
+            <mat-icon>{{ item.icon }}</mat-icon>
+          </a>
+        }
+      </mat-nav-list>
+    </mat-drawer>
     <router-outlet />
-  </div>
+  </mat-drawer-container>
 </div>
