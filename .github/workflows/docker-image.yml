@@ -1,18 +1,24 @@
-name: Docker Image CI
+name: CI/CD
 
 on:
   push:
-    branches: [ "main" ]
+    branches:
+      - dev
+      - feat/setup
   pull_request:
-    branches: [ "main" ]
+    branches:
+      - dev
+      - feat/setup
 
 jobs:
-
-  build:
-
+  build_and_test:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
-    - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag mundayreview:$(date +%s)
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '20.18.0'
+      - run: npm install
+      - run: npm run build
+      - run: npm test
