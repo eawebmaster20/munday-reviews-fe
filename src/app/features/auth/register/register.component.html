@@ -29,8 +29,10 @@
   <p>
     <mat-form-field appearance="outline">
       <mat-label>Password</mat-label>
-      <input type="password" formControlName="password" matInput placeholder="Placeholder" />
-      <mat-icon matSuffix>lock</mat-icon>
+      <input [type]="inputType" formControlName="password" matInput placeholder="Password*" />
+      <mat-icon class="cursor-pointer" (click)="toggleType()" matSuffix>{{
+        inputType === 'password' ? 'lock' : 'lock_open'
+      }}</mat-icon>
       @if (signupForm.get('password')?.hasError('required')) {
         <mat-error> Password is required. </mat-error>
       }
@@ -40,8 +42,13 @@
     </mat-form-field>
   </p>
   <p class="d-flex">
-    <button mat-flat-button color="primary" (click)="register()" [disabled]="signupForm.valid">
-      Login
+    <button
+      mat-flat-button
+      color="primary"
+      (click)="register()"
+      [disabled]="!signupForm.valid || formSubmitted"
+    >
+      Signup
     </button>
     <span class="link" routerLink="/auth/login">Login instead</span>
   </p>

@@ -11,7 +11,9 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
+import { AuthService } from '../auth.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-register',
@@ -31,12 +33,38 @@ import { RouterLink } from '@angular/router';
 })
 export class RegisterComponent implements OnInit {
   signupForm!: FormGroup;
-  constructor(private fb: FormBuilder) {}
+  formSubmitted: boolean = false;
+  inputType: string = 'password';
+  constructor(
+    private toastr: ToastrService,
+    private fb: FormBuilder,
+    private authService: AuthService,
+    private router: Router,
+  ) {}
 
   register() {
-    console.log(this.signupForm.value);
+    this.formSubmitted = true;
+    // console.log(this.signupForm.value);
+    this.authService.register(this.signupForm.value).subscribe({
+      next: () => {
+        this.toastr.success('Registration successful', 'Success');
+        this.router.navigate(['/auth/login']);
+      },
+      error: (error) => {
+        this.formSubmitted = false;
+        this.toastr.error(error.error.message, 'Error');
+        // console.error('Error Signing Up', error.error.message)
+      },
+    });
   }
 
+  toggleType() {
+    if (this.inputType === 'text') {
+      this.inputType = 'password';
+      return;
+    }
+    this.inputType = 'text';
+  }
   ngOnInit() {
     this.signupForm = this.fb.group({
       username: ['', Validators.required],

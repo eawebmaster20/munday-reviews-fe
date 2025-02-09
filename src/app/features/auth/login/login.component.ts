@@ -11,7 +11,9 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
+import { AuthService } from '../auth.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-login',
@@ -31,16 +33,42 @@ import { RouterLink } from '@angular/router';
 })
 export class LoginComponent implements OnInit {
   loginForm!: FormGroup;
-  constructor(private fb: FormBuilder) {}
+  formSubmitted: boolean = false;
+  inputType: string = 'password';
+  constructor(
+    private toastr: ToastrService,
+    private fb: FormBuilder,
+    private authService: AuthService,
+    private router: Router,
+  ) {}
 
   authenticate() {
-    console.log('this.loginForm.value');
-    console.log(this.loginForm.value);
+    this.formSubmitted = true;
+    this.authService.login(this.loginForm.value).subscribe({
+      next: (res) => {
+        this.toastr.success('Logged in successfully', 'Success');
+        this.authService.setUserAuthenticated(true);
+        this.router.navigate(['dashboard/home']);
+        console.error(res);
+      },
+      error: (error) => {
+        this.formSubmitted = false;
+        this.toastr.error(error.error.message, 'Error');
+      },
+    });
+  }
+
+  toggleType() {
+    if (this.inputType === 'text') {
+      this.inputType = 'password';
+      return;
+    }
+    this.inputType = 'text';
   }
 
   ngOnInit() {
     this.loginForm = this.fb.group({
-      email: ['', [Validators.required, Validators.email]],
+      username: ['', [Validators.required]],
       password: ['', [Validators.required, Validators.minLength(5)]],
     });
   }
