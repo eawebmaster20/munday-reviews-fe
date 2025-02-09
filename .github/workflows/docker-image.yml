@@ -3,9 +3,9 @@ name: CI/CD
 on:
   push:
     branches:
+      - feat/setup
       - main
       - dev
-      - feat/setup
 
 jobs:
   build:
