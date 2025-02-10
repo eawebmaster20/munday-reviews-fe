@@ -1,0 +1,30 @@
+.container{
+    .review-form-container{
+        margin: 0 2rem;
+        .create-review-form{
+            display: flex;
+            flex-direction: column;
+
+            .title-rating{
+                display: flex;
+                width: 100%;
+                gap: 1rem;
+
+                .title{
+                    width: 50%;
+                }
+                .rating{
+                    display: flex;
+                    margin-left: auto;
+
+                    h4{
+                        display: flex;
+                        width: fit-content;
+                        align-content: center;
+                    }
+                }
+            }
+        }
+        
+    }
+}

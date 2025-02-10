@@ -1,0 +1,39 @@
+<div class="container">
+  <div class="review-form-container">
+    <h2>Write a Review for {{ (stateService.getReviewObj() | async).name }}</h2>
+    <form [formGroup]="reviewForm" (ngSubmit)="submitReview()" class="create-review-form">
+      <p class="title-rating">
+        <mat-form-field appearance="outline" class="title">
+          <input matInput formControlName="title" placeholder="Title" type="text" />
+        </mat-form-field>
+
+        <span class="rating">
+          <h4>Rating :</h4>
+          <app-star-rating
+            [width]="'280px'"
+            (valueChange)="updateRating($event)"
+            [readOnly]="false"
+          ></app-star-rating>
+        </span>
+      </p>
+      <mat-form-field appearance="outline">
+        <textarea
+          rows="6"
+          minlength="5"
+          matInput
+          placeholder="Review"
+          formControlName="content"
+        ></textarea>
+        <mat-error *ngIf="reviewForm.get('content')?.hasError('required')">
+          Review is required
+        </mat-error>
+        <mat-error *ngIf="reviewForm.get('content')?.hasError('minlength')">
+          characters must not be less than 5
+        </mat-error>
+      </mat-form-field>
+      <button type="submit" mat-raised-button color="primary" [disabled]="reviewForm.invalid">
+        Submit
+      </button>
+    </form>
+  </div>
+</div>
