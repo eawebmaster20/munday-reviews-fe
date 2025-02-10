@@ -1,32 +1,51 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
+import { ICompanyCardData } from '../../models/companycard.interface';
 
 @Injectable({
   providedIn: 'root',
 })
 export class StateService {
-  private data: any = {
-    showSidenav: true,
-  };
-  constructor() {}
-  // Add state management methods here, e.g., get, set, etc.
-  private state = new BehaviorSubject<any>(this.data);
-  getState() {
-    return this.state.asObservable();
+  private showSidenav$ = new BehaviorSubject<boolean>(true);
+  private reviewObj$ = new BehaviorSubject<any>({
+    companyId: 3,
+    name: 'Amazon',
+  });
+  private companies$ = new BehaviorSubject<ICompanyCardData[]>([]);
+
+  getShowSidenav() {
+    return this.showSidenav$.asObservable();
   }
 
-  setStateItem(item: any) {
-    this.data[item.key] = item.value;
-    this.state.next(this.data);
+  setCompanies(companies: ICompanyCardData[]) {
+    this.companies$.next(companies);
+  }
+  getCompanies() {
+    return this.companies$.asObservable();
   }
 
-  getStateItem(key: string) {
-    return this.data[key];
+  setShowSidenav(value: boolean) {
+    this.showSidenav$.next(value);
   }
 
-  removeStateItem(key: string) {
-    delete this.data[key];
-    this.state.next(this.data);
+  getReviewObj() {
+    return this.reviewObj$.asObservable();
+  }
+
+  updateReviewObj(data: any) {
+    const currentObj = this.reviewObj$.getValue();
+    const updatedObj = {
+      ...currentObj,
+      ...data,
+    };
+    this.reviewObj$.next(updatedObj);
+  }
+
+  removeReviewObjKey(key: string) {
+    const currentObj = this.reviewObj$.getValue();
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { [key]: _, ...newObj } = currentObj;
+    this.reviewObj$.next(newObj);
   }
 }
