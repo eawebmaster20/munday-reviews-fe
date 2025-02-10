@@ -4,7 +4,7 @@
     <mat-drawer
       class="drawer-container"
       #drawer
-      [opened]="state.getStateItem('showSidenav') && authService.isAuthenticated$ | async"
+      [opened]="state.getShowSidenav() && authService.isAuthenticated$ | async"
       mode="side"
     >
       <mat-nav-list>
