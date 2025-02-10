@@ -13,6 +13,13 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./features/dashboard/home/home.component').then((m) => m.HomeComponent),
       },
+      {
+        path: 'reviews/create',
+        loadComponent: () =>
+          import('./features/dashboard/reviews/create/create.component').then(
+            (m) => m.CreateComponent,
+          ),
+      },
       // {
       //   path: 'review/:id',
       //   loadComponent: () =>
