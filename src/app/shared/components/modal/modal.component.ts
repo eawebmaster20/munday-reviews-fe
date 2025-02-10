@@ -1,15 +1,18 @@
 import { Component, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
-import { MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { StarRatingComponent } from '../star-rating/star-rating.component';
 import { AuthService } from '../../../features/auth/auth.service';
 import { ToastrService } from 'ngx-toastr';
 import { AsyncPipe } from '@angular/common';
+import { Router } from '@angular/router';
+import { StateService } from '../../../core/services/state/state.service';
+import { MatDividerModule } from '@angular/material/divider';
 
 @Component({
   selector: 'app-modal',
   standalone: true,
-  imports: [MatDialogModule, MatButtonModule, StarRatingComponent, AsyncPipe],
+  imports: [MatDialogModule, MatButtonModule, StarRatingComponent, AsyncPipe, MatDividerModule],
   templateUrl: './modal.component.html',
   styleUrl: './modal.component.scss',
 })
@@ -19,11 +22,15 @@ export class ModalComponent {
   constructor(
     private toastr: ToastrService,
     public authService: AuthService,
+    private router: Router,
+    private stateService: StateService,
+    private dialogRef: MatDialogRef<ModalComponent>,
   ) {}
   showAddReview() {
-    if (!this.authService.isAuthenticatedUser()) {
-      console.log('Please login');
-      this.toastr.error('Please login to add a review', 'Access denied');
-    }
+    this.router.navigate(['dashboard/reviews/create']);
+    const data = { companyId: this.data.id, name: this.data.name };
+    this.stateService.updateReviewObj({ ...data });
+    console.log(this.stateService.getReviewObj());
+    this.dialogRef.close();
   }
 }
