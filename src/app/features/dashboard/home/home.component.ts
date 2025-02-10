@@ -1,10 +1,13 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { CompanyCardComponent } from '../../../shared/components/company-card/company-card.component';
 import { ICompanyCardData } from '../../../core/models/companycard.interface';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { ModalComponent } from '../../../shared/components/modal/modal.component';
 import { MatDialog } from '@angular/material/dialog';
+import { StateService } from '../../../core/services/state/state.service';
+import { ApiService } from '../../../core/services/api/api.service';
+import { take } from 'rxjs';
 
 @Component({
   selector: 'app-home',
@@ -13,85 +16,52 @@ import { MatDialog } from '@angular/material/dialog';
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
 })
-export class HomeComponent {
-  companies: ICompanyCardData[] = [
-    {
-      id: 1,
-      info: 'google.com',
-      name: 'Google',
-      logoUrl: 'assets/logo.png',
-      reviewsCount: 1000,
-      averageRating: 3,
-      readonly: false,
-    },
-    {
-      id: 2,
-      info: 'facebook.com',
-      name: 'Facebook',
-      logoUrl: 'assets/logo.png',
-      reviewsCount: 2000,
-      averageRating: 4,
-      readonly: false,
-    },
-    {
-      id: 3,
-      info: 'aws.com',
-      name: 'Amazon',
-      logoUrl: 'assets/logo.png',
-      reviewsCount: 2000,
-      averageRating: 3,
-      readonly: false,
-    },
-    {
-      id: 4,
-      info: 'x.com',
-      name: 'Tweeter',
-      logoUrl: 'assets/logo.png',
-      reviewsCount: 2000,
-      averageRating: 1,
-      readonly: false,
-    },
-    {
-      id: 5,
-      info: 'facebook.com',
-      name: 'Facebook',
-      logoUrl: 'assets/logo.png',
-      reviewsCount: 2000,
-      averageRating: 4,
-      readonly: false,
-    },
-    {
-      id: 6,
-      info: 'd.sdt.com',
-      name: 'Facebook',
-      logoUrl: 'assets/logo.png',
-      reviewsCount: 2000,
-      averageRating: 5,
-      readonly: false,
-    },
-    {
-      id: 7,
-      info: 'noye.com',
-      name: 'Facebook',
-      logoUrl: 'assets/logo.png',
-      reviewsCount: 2000,
-      averageRating: 2,
-      readonly: false,
-    },
-  ];
+export class HomeComponent implements OnInit {
+  companies: ICompanyCardData[] = [];
   dialog = inject(MatDialog);
-
+  constructor(
+    private stateService: StateService,
+    private api: ApiService,
+  ) {}
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     console.log(filterValue);
   }
 
   viewCompany(company: ICompanyCardData) {
-    const dialogRef = this.dialog.open(ModalComponent, {
+    // const dialogRef = this.dialog.open(ModalComponent, {
+    //   data: company,
+    // });
+    // dialogRef.afterClosed().subscribe((result) => {
+    //   console.log(`Dialog result: ${result}`);
+    // });
+    this.dialog.open(ModalComponent, {
       data: company,
     });
-    dialogRef.afterClosed().subscribe((result) => {
-      console.log(`Dialog result: ${result}`);
+  }
+  ngOnInit(): void {
+    this.api
+      .get('companies')
+      .pipe(take(1))
+      .subscribe({
+        next: (companies) => {
+          this.stateService.setCompanies(companies);
+          this.loadData();
+        },
+        error: (error) => {
+          console.error('Error retrieving company cards', error);
+        },
+      });
+  }
+  loadData() {
+    this.stateService.getCompanies().subscribe({
+      next: (companies) => {
+        this.companies = companies;
+        console.log(companies);
+      },
+      error: (error) => {
+        console.error('Error retrieving company cards', error);
+      },
     });
   }
 }
