@@ -1,14 +1,18 @@
 .brand-logo{
     width: 36px;
     height: 36px;
-
+    
     img{
         width: 100%;
+        border-radius: 50%;
     }
 }
 
 mat-card{
     &:hover{
+        .truncate{
+            display: none;
+        }
         .view{
             display: flex !important;
             background: #a58383;
@@ -18,12 +22,20 @@ mat-card{
 mat-card-title{
     display: grid;
     grid-template-columns: 36px 1fr;
-
+    padding: 16px 16px;
+    
     .title {
         display: flex;
         justify-content: center;
         margin-right: 36px;
     }
+}
+
+.truncate{
+    display: -webkit-box;
+    -webkit-line-clamp: 3; 
+    -webkit-box-orient: vertical;
+    overflow: hidden;
 }
 
 mat-card-content{
@@ -48,6 +60,10 @@ mat-card-content{
     }
 }
 
+mat-card-actions{
+    display: flex;
+    justify-content: center;
+}
 app-star-rating{
-    width: 100%;
+    width: 60%;
 }
