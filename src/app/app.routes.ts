@@ -14,6 +14,11 @@ export const routes: Routes = [
           import('./features/dashboard/home/home.component').then((m) => m.HomeComponent),
       },
       {
+        path: 'company/:id',
+        loadComponent: () =>
+          import('./features/dashboard/company/company.component').then((m) => m.CompanyComponent),
+      },
+      {
         path: 'reviews/create',
         loadComponent: () =>
           import('./features/dashboard/reviews/create/create.component').then(
@@ -47,6 +52,11 @@ export const routes: Routes = [
       },
       {
         path: 'login',
+        loadComponent: () =>
+          import('./features/auth/login/login.component').then((m) => m.LoginComponent),
+      },
+      {
+        path: 'login/company',
         loadComponent: () =>
           import('./features/auth/login/login.component').then((m) => m.LoginComponent),
       },

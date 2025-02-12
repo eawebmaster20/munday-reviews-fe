@@ -3,13 +3,17 @@
     <div class="brand" [routerLink]="'dashboard/home'">Munday Reviews</div>
     <div class="menu">
       <ul>
-        <li class="menu-item">Write a review</li>
-        <li class="menu-item">Categories</li>
+        @if (stateService.companyAuthentication) {
+          <li class="menu-item">Write a review</li>
+          <li class="menu-item">Categories</li>
+        }
         @if (authService.isAuthenticated$ | async) {
           <li class="menu-item" (click)="authService.logout()">logout</li>
-          <li><span>For business</span></li>
         } @else {
           <li class="menu-item" [routerLink]="'auth/login'">Login</li>
+        }
+        @if (!stateService.companyAuthentication) {
+          <li (click)="loginAsBusiness()"><span>For business</span></li>
         }
       </ul>
     </div>

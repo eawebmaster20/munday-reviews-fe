@@ -10,6 +10,17 @@ export class StateService {
   searchTerm: string = '';
   sortByRating: boolean = false;
   sortByDate: boolean = false;
+  companyAuthentication: boolean = false;
+  company: ICompanyCardData = {
+    id: 0,
+    name: '',
+    logoUrl: '',
+    reviewsCount: 0,
+    reviews: [],
+    description: '',
+    averageRating: 0,
+    readonly: false,
+  };
   private showSidenav$ = new BehaviorSubject<boolean>(true);
   private reviewObj$ = new BehaviorSubject<any>({
     companyId: 3,

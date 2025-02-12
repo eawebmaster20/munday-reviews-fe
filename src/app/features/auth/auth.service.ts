@@ -17,8 +17,8 @@ export class AuthService {
     private router: Router,
     private stateService: StateService,
   ) {}
-  login(payload: IAuthReqPayload) {
-    return this.api.post('auth/login', payload);
+  login(payload: IAuthReqPayload, endpoint?: string) {
+    return this.api.post(endpoint || 'auth/login', payload);
   }
 
   register(payload: IAuthReqPayload) {
