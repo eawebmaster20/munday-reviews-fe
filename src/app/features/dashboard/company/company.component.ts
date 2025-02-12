@@ -8,11 +8,12 @@ import { ReviewCardComponent } from '../../../shared/components/review-card/revi
 import { AuthService } from '../../auth/auth.service';
 import { AsyncPipe } from '@angular/common';
 import { StateService } from '../../../core/services/state/state.service';
+import { ReviewSummaryCardComponent } from '../../../shared/components/review-summary-card/review-summary-card.component';
 
 @Component({
   selector: 'app-company',
   standalone: true,
-  imports: [MatExpansionModule, ReviewCardComponent, AsyncPipe],
+  imports: [MatExpansionModule, ReviewCardComponent, ReviewSummaryCardComponent, AsyncPipe],
   templateUrl: './company.component.html',
   styleUrl: './company.component.scss',
 })

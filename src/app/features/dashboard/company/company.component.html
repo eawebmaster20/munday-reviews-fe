@@ -25,6 +25,7 @@
         </mat-panel-description>
       </mat-expansion-panel-header>
       <p></p>
+      <app-review-summary-card />
       <div class="reviews-list">
         @for (item of stateService.company.reviews; track $index) {
           <app-review-card [data]="item" [isAuthenticated]="authService.isAuthenticated$ | async" />

@@ -14,5 +14,15 @@
       <h3>{{ data.title }}</h3>
       {{ data.content }}
     </div>
+    @if (hasAuthority()) {
+      <div class="action-btn">
+        <button (click)="deleteReviewHandler(data.id)" color="warn" mat-icon-button aria-label="">
+          <mat-icon>delete</mat-icon>
+        </button>
+        <button (click)="editReviewHandler(data)" color="primary" mat-icon-button aria-label="">
+          <mat-icon>edit</mat-icon>
+        </button>
+      </div>
+    }
   </div>
 </div>

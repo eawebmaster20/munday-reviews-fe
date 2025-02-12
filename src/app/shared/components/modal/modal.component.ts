@@ -9,6 +9,7 @@ import { Router } from '@angular/router';
 import { StateService } from '../../../core/services/state/state.service';
 import { MatDividerModule } from '@angular/material/divider';
 import { ReviewCardComponent } from '../review-card/review-card.component';
+import { IReview } from '../../../core/models/companycard.interface';
 
 @Component({
   selector: 'app-modal',
@@ -43,10 +44,13 @@ export class ModalComponent {
   }
 
   deleteReview(id: string) {
-    console.log(id);
+    this.dialogRef.close(id);
   }
 
-  editReview(id: string) {
-    console.log(id);
+  editReview(payload: IReview) {
+    this.router.navigate(['/dashboard/reviews/create'], {
+      state: payload,
+    });
+    this.dialogRef.close();
   }
 }

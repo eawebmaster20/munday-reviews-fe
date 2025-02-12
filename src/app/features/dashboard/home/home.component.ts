@@ -13,6 +13,7 @@ import { FormsModule } from '@angular/forms';
 import { FilterPipe } from '../../../core/pipes/filter.pipe';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-home',
@@ -37,11 +38,15 @@ export class HomeComponent implements OnInit {
   constructor(
     public stateService: StateService,
     private api: ApiService,
+    private router: Router,
   ) {}
 
   viewCompany(company: ICompanyCardData) {
-    this.dialog.open(ModalComponent, {
+    const dialogRef = this.dialog.open(ModalComponent, {
       data: company,
+    });
+    dialogRef.afterClosed().subscribe(() => {
+      this.ngOnInit();
     });
   }
   ngOnInit(): void {
@@ -62,7 +67,7 @@ export class HomeComponent implements OnInit {
     this.stateService.getCompanies().subscribe({
       next: (companies) => {
         this.companies = companies;
-        console.log(companies);
+        // console.log(companies);
       },
       error: (error) => {
         console.error('Error retrieving company cards', error);

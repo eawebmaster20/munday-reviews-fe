@@ -36,24 +36,64 @@ export class CreateComponent implements OnInit {
   companyId: number = 0;
   userId: number | null = null;
   name: string = '';
+  updateMode: boolean = false;
+  reviewId: number | null = null;
   constructor(
     private fb: FormBuilder,
     private router: Router,
     public stateService: StateService,
     private api: ApiService,
-  ) {}
+  ) {
+    const navigation = this.router.getCurrentNavigation();
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const state = navigation?.extras.state as any;
+
+    if (state) {
+      console.log(state);
+      this.reviewForm = this.fb.group({
+        title: [state.title],
+        content: [state.content, Validators.required],
+        companyId: [state.companyId, Validators.required],
+        userId: [state.userId, Validators.required],
+        rating: [state.rating, [Validators.min(1), Validators.max(5)]],
+      });
+      this.rating = state.rating;
+      this.updateMode = true;
+      this.reviewId = state.id;
+    } else {
+      this.reviewForm = this.fb.group({
+        title: [''],
+        content: ['', Validators.required],
+        companyId: [this.companyId, Validators.required],
+        userId: [this.userId, Validators.required],
+        rating: [this.rating, [Validators.min(1), Validators.max(5)]],
+      });
+    }
+  }
 
   submitReview() {
     console.log(this.reviewForm.value);
-    this.api.post('reviews', this.reviewForm.value).subscribe({
-      next: () => {
-        this.reviewForm.reset();
-        this.router.navigate(['/dashboard/home']);
-      },
-      error: (error) => {
-        console.error('Error creating review', error);
-      },
-    });
+    if (this.updateMode) {
+      this.api.put('reviews', this.reviewForm.value, this.reviewId).subscribe({
+        next: () => {
+          this.reviewForm.reset();
+          this.router.navigate(['/dashboard/home']);
+        },
+        error: (error) => {
+          console.error('Error creating review', error);
+        },
+      });
+    } else {
+      this.api.post('reviews', this.reviewForm.value).subscribe({
+        next: () => {
+          this.reviewForm.reset();
+          this.router.navigate(['/dashboard/home']);
+        },
+        error: (error) => {
+          console.error('Error creating review', error);
+        },
+      });
+    }
   }
 
   updateRating(rating: number) {
@@ -81,12 +121,5 @@ export class CreateComponent implements OnInit {
     } else {
       this.router.navigate(['/dashboard/home']);
     }
-    this.reviewForm = this.fb.group({
-      title: [''],
-      content: ['', Validators.required],
-      companyId: [this.companyId, Validators.required],
-      userId: [this.userId, Validators.required],
-      rating: [this.rating, [Validators.min(1), Validators.max(5)]],
-    });
   }
 }

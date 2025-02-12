@@ -5,4 +5,5 @@ package-lock.json
 package.json
 tsconfig.app.json
 tsconfig.json
+set-env.js
 tsconfig.spec.json

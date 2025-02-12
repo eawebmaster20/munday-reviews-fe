@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { ICompanyCardData } from '../../models/companycard.interface';
+import { ICompanyCardData, IReview } from '../../models/companycard.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -54,6 +54,12 @@ export class StateService {
       ...data,
     };
     this.reviewObj$.next(updatedObj);
+  }
+
+  calculateAverageRating(reviews: IReview[]): number {
+    const totalRatings = reviews.reduce((sum, review) => sum + review.rating, 0);
+    const averageRating = totalRatings / reviews.length;
+    return averageRating;
   }
 
   removeReviewObjKey(key: string) {

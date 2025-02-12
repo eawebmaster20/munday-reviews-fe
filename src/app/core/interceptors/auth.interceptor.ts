@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { HttpInterceptorFn } from '@angular/common/http';
-import { environment } from '../../../environments/environment.development';
 import { HttpEventType } from '@angular/common/http';
 import { tap } from 'rxjs';
 import { HttpRes } from '../models/httpRes.interface';
+import { environment } from '../../../environments/environment';
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const api = environment.apiUrl;
