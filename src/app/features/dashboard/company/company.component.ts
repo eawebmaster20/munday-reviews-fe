@@ -20,6 +20,7 @@ import { ReviewSummaryCardComponent } from '../../../shared/components/review-su
 export class CompanyComponent implements OnInit {
   private socket: Socket;
   panelOpenState = false;
+
   constructor(
     private route: ActivatedRoute,
     public authService: AuthService,
@@ -27,17 +28,24 @@ export class CompanyComponent implements OnInit {
   ) {
     this.socket = io('http://localhost:5000');
   }
+
   ngOnInit(): void {
     Chart.register(...registerables);
-    this.createReviewsTrendChart();
-    this.createStarRatingsChart();
-    this.createReviewsPieChart();
+
+    // Initialize charts when company data is available
+    if (this.stateService.company) {
+      this.initializeCharts(this.stateService.company);
+    }
+
     this.socket.on('newReviewOnCompany', (company: { message: string; data: ICompanyCardData }) => {
       if (company.data.id) {
         console.log(company);
         this.stateService.company = company.data;
+        // Update charts when new review is received
+        this.initializeCharts(company.data);
       }
     });
+
     this.route.paramMap.subscribe((params) => {
       if (params.get('id')) {
         this.socket.emit('joinCompany', params.get('id')?.toString());
@@ -45,28 +53,64 @@ export class CompanyComponent implements OnInit {
     });
   }
 
-  createReviewsTrendChart(): void {
+  private initializeCharts(companyData: ICompanyCardData): void {
+    this.createReviewsTrendChart(companyData);
+    this.createStarRatingsChart(companyData);
+    this.createReviewsPieChart(companyData);
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  private groupReviewsByMonth(reviews: any[]): Map<string, number> {
+    const monthlyReviews = new Map<string, number>();
+    const months = [
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec',
+    ];
+
+    reviews.forEach((review) => {
+      const date = new Date(review.timestamp);
+      const monthKey = months[date.getMonth()];
+      monthlyReviews.set(monthKey, (monthlyReviews.get(monthKey) || 0) + 1);
+    });
+
+    return monthlyReviews;
+  }
+
+  createReviewsTrendChart(companyData: ICompanyCardData): void {
+    const months = [
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec',
+    ];
+    const monthlyReviews = this.groupReviewsByMonth(companyData.reviews);
+
     const reviewsTrendConfig: ChartConfiguration = {
       type: 'line',
       data: {
-        labels: [
-          'Jan',
-          'Feb',
-          'Mar',
-          'Apr',
-          'May',
-          'Jun',
-          'Jul',
-          'Aug',
-          'Sep',
-          'Oct',
-          'Nov',
-          'Dec',
-        ],
+        labels: months,
         datasets: [
           {
             label: 'Monthly Reviews',
-            data: [10, 15, 8, 20, 25, 30, 18, 24, 35, 40, 28, 50],
+            data: months.map((month) => monthlyReviews.get(month) || 0),
             borderColor: 'rgba(75, 192, 192, 1)',
             backgroundColor: 'rgba(75, 192, 192, 0.2)',
             tension: 0.4,
@@ -78,22 +122,43 @@ export class CompanyComponent implements OnInit {
         responsive: true,
         plugins: {
           legend: { position: 'top' },
+          title: {
+            display: true,
+            text: 'Reviews Trend Over Time',
+          },
+        },
+        scales: {
+          y: {
+            beginAtZero: true,
+            ticks: {
+              stepSize: 1,
+            },
+          },
         },
       },
     };
 
+    const existingChart = Chart.getChart('reviewsTrendChart');
+    if (existingChart) {
+      existingChart.destroy();
+    }
     new Chart('reviewsTrendChart', reviewsTrendConfig);
   }
 
-  createStarRatingsChart(): void {
+  createStarRatingsChart(companyData: ICompanyCardData): void {
+    const ratings = [1, 2, 3, 4, 5];
+    const ratingCounts = ratings.map(
+      (rating) => companyData.reviews.filter((review) => review.rating === rating).length,
+    );
+
     const starRatingsConfig: ChartConfiguration = {
       type: 'bar',
       data: {
-        labels: ['1 Star', '2 Stars', '3 Stars', '4 Stars', '5 Stars'],
+        labels: ratings.map((r) => `${r} Star${r !== 1 ? 's' : ''}`),
         datasets: [
           {
             label: 'Number of Ratings',
-            data: [5, 8, 12, 40, 70],
+            data: ratingCounts,
             backgroundColor: 'rgba(54, 162, 235, 0.2)',
             borderColor: 'rgba(54, 162, 235, 1)',
             borderWidth: 1,
@@ -102,25 +167,43 @@ export class CompanyComponent implements OnInit {
       },
       options: {
         responsive: true,
+        plugins: {
+          legend: { position: 'top' },
+          title: {
+            display: true,
+            text: 'Rating Distribution',
+          },
+        },
         scales: {
           y: {
             beginAtZero: true,
+            ticks: {
+              stepSize: 1,
+            },
           },
         },
       },
     };
 
+    const existingChart = Chart.getChart('starRatingsChart');
+    if (existingChart) {
+      existingChart.destroy();
+    }
     new Chart('starRatingsChart', starRatingsConfig);
   }
 
-  createReviewsPieChart(): void {
-    const positiveReviews = 110;
-    const negativeReviews = 25;
+  createReviewsPieChart(companyData: ICompanyCardData): void {
+    const positiveReviews = companyData.reviews.filter((review) => review.rating >= 4).length;
+    const negativeReviews = companyData.reviews.filter((review) => review.rating < 4).length;
+    const total = positiveReviews + negativeReviews;
+
+    const positivePct = ((positiveReviews / total) * 100).toFixed(1);
+    const negativePct = ((negativeReviews / total) * 100).toFixed(1);
 
     const reviewsPieConfig: ChartConfiguration = {
       type: 'pie',
       data: {
-        labels: ['Positive Reviews (4-5 Stars)', 'Negative Reviews (1-3 Stars)'],
+        labels: [`Positive Reviews (${positivePct}%)`, `Negative Reviews (${negativePct}%)`],
         datasets: [
           {
             data: [positiveReviews, negativeReviews],
@@ -133,10 +216,18 @@ export class CompanyComponent implements OnInit {
         responsive: true,
         plugins: {
           legend: { position: 'bottom' },
+          title: {
+            display: true,
+            text: 'Review Sentiment Distribution',
+          },
         },
       },
     };
 
+    const existingChart = Chart.getChart('reviewsPieChart');
+    if (existingChart) {
+      existingChart.destroy();
+    }
     new Chart('reviewsPieChart', reviewsPieConfig);
   }
 }
