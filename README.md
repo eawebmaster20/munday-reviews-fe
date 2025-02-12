@@ -103,3 +103,4 @@ This project uses GitHub Actions for continuous integration and deployment.
 
 - The CI/CD pipeline is set up to build and push to docker hub.
 - To trigger the deployment manually, use the GitHub Actions tab in your repository to start the workflow.
+
