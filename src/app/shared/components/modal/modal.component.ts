@@ -8,11 +8,19 @@ import { AsyncPipe } from '@angular/common';
 import { Router } from '@angular/router';
 import { StateService } from '../../../core/services/state/state.service';
 import { MatDividerModule } from '@angular/material/divider';
+import { ReviewCardComponent } from '../review-card/review-card.component';
 
 @Component({
   selector: 'app-modal',
   standalone: true,
-  imports: [MatDialogModule, MatButtonModule, StarRatingComponent, AsyncPipe, MatDividerModule],
+  imports: [
+    MatDialogModule,
+    MatButtonModule,
+    StarRatingComponent,
+    AsyncPipe,
+    MatDividerModule,
+    ReviewCardComponent,
+  ],
   templateUrl: './modal.component.html',
   styleUrl: './modal.component.scss',
 })
@@ -32,5 +40,13 @@ export class ModalComponent {
     this.stateService.updateReviewObj({ ...data });
     console.log(this.stateService.getReviewObj());
     this.dialogRef.close();
+  }
+
+  deleteReview(id: string) {
+    console.log(id);
+  }
+
+  editReview(id: string) {
+    console.log(id);
   }
 }

@@ -8,33 +8,38 @@ import { MatDialog } from '@angular/material/dialog';
 import { StateService } from '../../../core/services/state/state.service';
 import { ApiService } from '../../../core/services/api/api.service';
 import { take } from 'rxjs';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { FilterPipe } from '../../../core/pipes/filter.pipe';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CompanyCardComponent, MatInputModule, MatFormFieldModule],
+  imports: [
+    CompanyCardComponent,
+    MatInputModule,
+    MatFormFieldModule,
+    MatButtonModule,
+    MatIconModule,
+    CommonModule,
+    FormsModule,
+    FilterPipe,
+  ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
 })
 export class HomeComponent implements OnInit {
   companies: ICompanyCardData[] = [];
+
   dialog = inject(MatDialog);
   constructor(
-    private stateService: StateService,
+    public stateService: StateService,
     private api: ApiService,
   ) {}
-  applyFilter(event: Event) {
-    const filterValue = (event.target as HTMLInputElement).value;
-    console.log(filterValue);
-  }
 
   viewCompany(company: ICompanyCardData) {
-    // const dialogRef = this.dialog.open(ModalComponent, {
-    //   data: company,
-    // });
-    // dialogRef.afterClosed().subscribe((result) => {
-    //   console.log(`Dialog result: ${result}`);
-    // });
     this.dialog.open(ModalComponent, {
       data: company,
     });
@@ -63,5 +68,14 @@ export class HomeComponent implements OnInit {
         console.error('Error retrieving company cards', error);
       },
     });
+  }
+
+  toggleFilterVar(param: string) {
+    if (param === 'date') {
+      this.stateService.sortByDate = !this.stateService.sortByDate;
+    }
+    if (param === 'rating') {
+      this.stateService.sortByRating = !this.stateService.sortByRating;
+    }
   }
 }

@@ -6,12 +6,18 @@
 
     .search-bar{
         margin-left: auto;
-        width: 35%;
-        min-width: 350px;
-        max-width: 500px;
+        display: flex;
+        // width: 35%;
+        // min-width: 350px;
+        // max-width: 500px;
 
         mat-form-field{
-            width: 100%;
+            width: 400px;
+        }
+
+        .sort{
+            display: flex;
+            align-items: center;
         }
     }
     

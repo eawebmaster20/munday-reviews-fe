@@ -7,6 +7,9 @@ import { ICompanyCardData } from '../../models/companycard.interface';
   providedIn: 'root',
 })
 export class StateService {
+  searchTerm: string = '';
+  sortByRating: boolean = false;
+  sortByDate: boolean = false;
   private showSidenav$ = new BehaviorSubject<boolean>(true);
   private reviewObj$ = new BehaviorSubject<any>({
     companyId: 3,

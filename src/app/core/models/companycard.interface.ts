@@ -6,6 +6,7 @@ export interface ICompanyCardData {
   reviews: IReview[];
   description: string;
   averageRating: number;
+  updatedAt?: string;
   readonly: boolean;
 }
 

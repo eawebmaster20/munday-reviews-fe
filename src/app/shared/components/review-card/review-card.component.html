@@ -1,1 +1,18 @@
-<p>review-card works!</p>
+<div class="review-card-container">
+  <div class="card-header">
+    <div class="reviewer-info">
+      <h2 class="reviewer-name">{{ data.user.username }}</h2>
+    </div>
+  </div>
+  <mat-divider></mat-divider>
+  <div class="card-content">
+    <div class="rating-date">
+      <app-star-rating [rating]="data.rating" [readOnly]="true"></app-star-rating>
+      <span class="reviewer-date">{{ functions.convertDateToRelative(data.updatedAt) }}</span>
+    </div>
+    <div class="review-text">
+      <h3>{{ data.title }}</h3>
+      {{ data.content }}
+    </div>
+  </div>
+</div>

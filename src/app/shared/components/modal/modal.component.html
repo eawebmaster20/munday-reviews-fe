@@ -19,6 +19,14 @@
     </div>
   </span>
   <mat-divider></mat-divider>
+  @for (item of data.reviews; track $index) {
+    <app-review-card
+      [data]="item"
+      [isAuthenticated]="authService.isAuthenticated$ | async"
+      (deleteReview)="deleteReview($event)"
+      (editReview)="editReview($event)"
+    />
+  }
 </mat-dialog-content>
 <mat-dialog-actions align="end">
   <button mat-button mat-dialog-close>Close</button>
