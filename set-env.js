@@ -15,7 +15,7 @@ args.forEach((arg) => {
 
 const envConfigFile = `
   export const environment = {
-    vapidKey: ${process.env['VAPID_KEY']} || ''
+    apiUrl: ${process.env['apiUrl']} || ''
   };
 `;
 console.log(process.env);
