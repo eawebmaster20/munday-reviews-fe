@@ -5,7 +5,9 @@
   </mat-card-title>
 
   <mat-card-content>
-    {{ data.info }}
+    <span class="truncate">
+      {{ data.description }}
+    </span>
     <div class="view">
       <button mat-flat-button (click)="handleClick()">view company</button>
     </div>

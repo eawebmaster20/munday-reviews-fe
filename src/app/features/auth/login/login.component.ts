@@ -11,9 +11,10 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
-import { Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { AuthService } from '../auth.service';
 import { ToastrService } from 'ngx-toastr';
+import { StateService } from '../../../core/services/state/state.service';
 
 @Component({
   selector: 'app-login',
@@ -39,23 +40,36 @@ export class LoginComponent implements OnInit {
     private toastr: ToastrService,
     private fb: FormBuilder,
     private authService: AuthService,
+    public stateService: StateService,
     private router: Router,
+    private route: ActivatedRoute,
   ) {}
 
   authenticate() {
     this.formSubmitted = true;
-    this.authService.login(this.loginForm.value).subscribe({
-      next: (res) => {
-        this.toastr.success('Logged in successfully', 'Success');
-        this.authService.setUserAuthenticated(true);
-        this.router.navigate(['dashboard/home']);
-        console.error(res);
-      },
-      error: (error) => {
-        this.formSubmitted = false;
-        this.toastr.error(error.error.message, 'Error');
-      },
-    });
+    this.authService
+      .login(
+        this.loginForm.value,
+        this.stateService.companyAuthentication ? 'auth/login/company' : '',
+      )
+      .subscribe({
+        next: (res) => {
+          this.toastr.success('Logged in successfully', 'Success');
+          this.authService.setUserAuthenticated(true);
+          if (this.stateService.companyAuthentication) {
+            console.log(res.data.company.id);
+
+            this.router.navigate([`dashboard/company/${res.data.company.id}`]);
+          } else {
+            this.router.navigate(['dashboard/home']);
+          }
+          console.error(res);
+        },
+        error: (error) => {
+          this.formSubmitted = false;
+          this.toastr.error(error.error.message, 'Error');
+        },
+      });
   }
 
   toggleType() {
@@ -67,9 +81,21 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.loginForm = this.fb.group({
-      username: ['', [Validators.required]],
-      password: ['', [Validators.required, Validators.minLength(5)]],
+    this.route.queryParams.subscribe((params) => {
+      if (params['company']) {
+        console.log('hasParam');
+        this.stateService.companyAuthentication = true;
+        this.loginForm = this.fb.group({
+          email: ['', [Validators.required, Validators.email]],
+          password: ['', [Validators.required, Validators.minLength(5)]],
+        });
+        return;
+      }
+      this.stateService.companyAuthentication = false;
+      this.loginForm = this.fb.group({
+        username: ['', [Validators.required]],
+        password: ['', [Validators.required, Validators.minLength(5)]],
+      });
     });
   }
 }

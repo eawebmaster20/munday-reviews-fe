@@ -1,0 +1,36 @@
+<div class="dashboard">
+  <h2>Company Analytics Dashboard</h2>
+
+  <div class="chart-container">
+    <h3>Monthly Reviews Trend</h3>
+    <canvas id="reviewsTrendChart"></canvas>
+  </div>
+
+  <div class="chart-container">
+    <h3>Star Ratings Distribution</h3>
+    <canvas id="starRatingsChart"></canvas>
+  </div>
+
+  <div class="chart-container">
+    <h3>Positive vs Negative Reviews</h3>
+    <canvas id="reviewsPieChart"></canvas>
+  </div>
+
+  <mat-accordion>
+    <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false">
+      <mat-expansion-panel-header>
+        <mat-panel-title> REVIEWS </mat-panel-title>
+        <mat-panel-description>
+          Expand to see all Your reviews {{ panelOpenState ? 'open' : 'closed' }}
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+      <p></p>
+      <app-review-summary-card />
+      <div class="reviews-list">
+        @for (item of stateService.company.reviews; track $index) {
+          <app-review-card [data]="item" [isAuthenticated]="authService.isAuthenticated$ | async" />
+        }
+      </div>
+    </mat-expansion-panel>
+  </mat-accordion>
+</div>

@@ -2,7 +2,7 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { environment } from '../../../../environments/environment.development';
+import { environment } from '../../../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
@@ -42,17 +42,17 @@ export class ApiService {
     }) as Observable<any>;
   }
 
-  put<T>(path: string, payload: T, baseUrl?: string, params?: any): Observable<any> {
+  put<T>(path: string, payload: T, params?: any, baseUrl?: string): Observable<any> {
     let httpParams = new HttpParams();
     if (params) {
       httpParams = new HttpParams({ fromObject: params });
     }
     if (baseUrl) {
-      return this.http.put(`${baseUrl}/${path}`, payload, {
+      return this.http.put(`${baseUrl}/${path}/${params}`, payload, {
         params: httpParams.keys().length ? httpParams : undefined,
       });
     }
-    return this.http.put(`${environment.apiUrl}/${path}`, payload, {
+    return this.http.put(`${environment.apiUrl}/${path}/${params}`, payload, {
       params: httpParams.keys().length ? httpParams : undefined,
     }) as Observable<any>;
   }
@@ -63,11 +63,11 @@ export class ApiService {
       httpParams = new HttpParams({ fromObject: params });
     }
     if (baseUrl) {
-      return this.http.put(`${baseUrl}/${path}/${id}`, {
+      return this.http.delete(`${baseUrl}/${path}/${id}`, {
         params: httpParams.keys().length ? httpParams : undefined,
       });
     }
-    return this.http.put(`${environment.apiUrl}/${path}/${id}`, {
+    return this.http.delete(`${environment.apiUrl}/${path}/${id}`, {
       params: httpParams.keys().length ? httpParams : undefined,
     }) as Observable<any>;
   }

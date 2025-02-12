@@ -2,9 +2,34 @@
     display:flex;
     width: 100%;
     justify-content:center;
+    background-color: #fafafa;
+    height: calc(100% - 92px);
     
     .route-container{
         max-width: 1360px;
         width: 100%;
+    }
+    
+    .drawer-container{
+        background-color: #b4cbfa;
+    }
+
+    .menu-item {
+        display: flex;
+        text-decoration: none;
+      
+        mat-icon {
+          font-size: 24px;
+        }
+      
+        .item-label {
+          font-size: 12px;
+          opacity: 0;
+          transition: opacity 0.2s;
+        }
+      
+        &:hover .item-label {
+          opacity: 1;
+        }
     }
 }

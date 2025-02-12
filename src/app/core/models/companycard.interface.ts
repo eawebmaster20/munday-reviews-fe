@@ -3,7 +3,31 @@ export interface ICompanyCardData {
   name: string;
   logoUrl: string;
   reviewsCount: number;
-  info: string;
+  reviews: IReview[];
+  description: string;
   averageRating: number;
+  updatedAt?: string;
   readonly: boolean;
+}
+
+export interface IReview {
+  companyId: number;
+  content: string;
+  createdAt: string;
+  id: number;
+  rating: number;
+  timestamp: string;
+  title: string;
+  updatedAt: string;
+  user: User;
+  userId: number;
+}
+
+interface User {
+  createdAt: string;
+  email: string;
+  id: number;
+  password: string;
+  updatedAt: string;
+  username: string;
 }
