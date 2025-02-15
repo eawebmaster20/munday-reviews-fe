@@ -27,9 +27,9 @@ export class AppComponent {
   title = 'mundayReviews';
   menuItems = [
     { label: 'Dashboard', icon: 'dashboard', link: '/dashboard/home' },
-    { label: 'Tasks', icon: 'task', link: '/tasks' },
-    { label: 'Settings', icon: 'settings', link: '/settings' },
-    { label: 'Profile', icon: 'person', link: '/profile' },
+    { label: 'Tasks', icon: 'task' },
+    { label: 'Settings', icon: 'settings' },
+    { label: 'Profile', icon: 'person' },
   ];
   constructor(
     public state: StateService,
