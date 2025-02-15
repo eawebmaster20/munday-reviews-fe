@@ -3,9 +3,7 @@ name: docker pipeline
 on:
   push:
     branches:
-      - feat/setup
       - main
-      - dev
 
 jobs:
   build:
