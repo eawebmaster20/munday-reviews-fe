@@ -1,4 +1,4 @@
-FROM node:hydrogen
+FROM node:alpine
 WORKDIR /app
 
 RUN ls
