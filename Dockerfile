@@ -1,6 +1,8 @@
 FROM node:hydrogen
 WORKDIR /app
 
+RUN ls
+
 COPY ./dist/out/browser .
 
 EXPOSE 8080
