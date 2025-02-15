@@ -1,6 +1,8 @@
 FROM node:alpine
 WORKDIR /app
 
+RUN npm i -g http-server
+
 COPY ./dist/munday-reviews/browser .
 
 EXPOSE 8080
