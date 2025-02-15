@@ -3,7 +3,7 @@ WORKDIR /app
 
 RUN ls
 
-COPY ./dist/out/browser .
+COPY ./dist/munday-reviews/browser .
 
 EXPOSE 8080
 
