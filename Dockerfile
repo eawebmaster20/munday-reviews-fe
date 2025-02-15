@@ -7,6 +7,8 @@ RUN npm i -g http-server
 
 RUN npm ci
 
+RUN npm run build:prod
+
 COPY ./dist/out/browser .
 
 EXPOSE 8080
